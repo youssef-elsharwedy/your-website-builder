@@ -1,0 +1,12 @@
+export const SHOPIFY_DOMAIN = 'your-website-builder-0nnog-d7hucxav.myshopify.com'
+export const SHOPIFY_TOKEN = '042ca1f1bfa82db98ec45aa850564152'
+const API_URL = `https://${SHOPIFY_DOMAIN}/api/2025-07/graphql.json`
+export type Money = { amount: string; currencyCode: string }
+export type ShopifyVariant = { id: string; title: string; price: Money; availableForSale: boolean; selectedOptions: Array<{ name: string; value: string }> }
+export type ShopifyProduct = { id: string; title: string; description: string; handle: string; productType: string; tags: string[]; priceRange: { minVariantPrice: Money }; images: { edges: Array<{ node: { url: string; altText: string | null } }> }; variants: { edges: Array<{ node: ShopifyVariant }> }; options: Array<{ name: string; values: string[] }> }
+type GraphResponse<T> = { data?: T; errors?: Array<{ message: string }> }
+export async function storefrontApi<T>(query: string, variables: Record<string, unknown> = {}) { const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Shopify-Storefront-Access-Token': SHOPIFY_TOKEN }, body: JSON.stringify({ query, variables }) }); if (!res.ok) throw new Error('تعذر الاتصال بالمتجر'); const json = await res.json() as GraphResponse<T>; if (json.errors?.length) throw new Error(json.errors[0]?.message ?? 'خطأ في المتجر'); return json.data }
+const PRODUCT_FIELDS = `id title description handle productType tags priceRange { minVariantPrice { amount currencyCode } } images(first: 8) { edges { node { url altText } } } variants(first: 20) { edges { node { id title availableForSale price { amount currencyCode } selectedOptions { name value } } } } options { name values }`
+export async function getProducts(first = 24, query?: string) { const data = await storefrontApi<{ products: { edges: Array<{ node: ShopifyProduct }> } }>(`query Products($first:Int!,$query:String){ products(first:$first,query:$query){ edges{ node{ ${PRODUCT_FIELDS} } } } }`, { first, query }); return data?.products.edges.map(e => e.node) ?? [] }
+export async function getProduct(handle: string) { const data = await storefrontApi<{ product: ShopifyProduct | null }>(`query Product($handle:String!){ product(handle:$handle){ ${PRODUCT_FIELDS} } }`, { handle }); return data?.product ?? null }
+export function formatCurrency(money: Money) { return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: money.currencyCode, maximumFractionDigits: 0 }).format(Number(money.amount)) }
