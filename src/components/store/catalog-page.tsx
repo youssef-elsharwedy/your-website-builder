@@ -1,6 +1,32 @@
-import { useEffect, useMemo, useState } from 'react'
-import { SlidersHorizontal } from 'lucide-react'
 import { ProductCard } from './product-card'
-import { getProducts, type ShopifyProduct } from '@/lib/shopify'
-import { Button } from '@/components/ui/button'
-export function CatalogPage({title='كل المنتجات',query}:{title?:string;query?:string}){const[p,setP]=useState<ShopifyProduct[]>([]),[loading,setLoading]=useState(true),[sort,setSort]=useState('new');useEffect(()=>{setLoading(true);void getProducts(50,query).then(setP).finally(()=>setLoading(false))},[query]);const products=useMemo(()=>[...p].sort((a,b)=>sort==='low'?Number(a.priceRange.minVariantPrice.amount)-Number(b.priceRange.minVariantPrice.amount):sort==='high'?Number(b.priceRange.minVariantPrice.amount)-Number(a.priceRange.minVariantPrice.amount):0),[p,sort]);return <div className="mx-auto max-w-[1400px] px-4 py-10 sm:px-6"><div className="mb-8 flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-bold text-accent">FLOUKAA COLLECTION</p><h1 className="mt-2 text-3xl font-black sm:text-4xl">{title}</h1><p className="mt-2 text-sm text-muted-foreground">{loading?'جاري التحميل...':`${products.length} منتج`}</p></div><div className="flex gap-2"><Button variant="outline"><SlidersHorizontal className="size-4"/>فلترة</Button><select className="h-11 border border-border bg-background px-3 text-sm" value={sort} onChange={e=>setSort(e.target.value)}><option value="new">الأحدث</option><option value="low">السعر: الأقل</option><option value="high">السعر: الأعلى</option></select></div></div>{loading?<div className="grid grid-cols-2 gap-4 md:grid-cols-4">{Array.from({length:8},(_,i)=><div key={i} className="aspect-[3/4] animate-pulse bg-muted"/>)}</div>:products.length?<div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4 xl:grid-cols-5">{products.map(x=><ProductCard key={x.id} product={x}/>)}</div>:<div className="py-20 text-center text-muted-foreground">لا توجد منتجات مطابقة.</div>}</div>}
+import { Reveal, Stagger, StaggerItem } from './motion'
+import { CatalogToolbar } from './catalog/catalog-toolbar'
+import { CatalogPagination } from './catalog/catalog-pagination'
+import { PER_PAGE, useCatalog } from './catalog/use-catalog'
+
+/** Single listing page used by shop, categories, offers, new arrivals, best sellers and search. */
+export function CatalogPage({ title = 'كل المنتجات', query, search }: { title?: string; query?: string; search?: string }) {
+  const cat = query?.startsWith('tag:') && !['tag:new', 'tag:best', 'tag:sale', 'tag:featured'].includes(query) ? query.slice(4) : undefined
+  const base = cat ? undefined : query
+  const c = useCatalog(base, { ...(cat ? { category: cat } : {}), ...(search ? { search } : {}) })
+  const from = (c.state.page - 1) * PER_PAGE + 1, to = Math.min(c.state.page * PER_PAGE, c.total)
+
+  return (
+    <div className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 sm:py-10">
+      <Reveal className="mb-6 min-w-0">
+        <p className="text-xs font-bold text-accent">FLOUKAA COLLECTION</p>
+        <h1 className="mt-2 break-words text-2xl font-black sm:text-4xl">{title}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {c.loading ? 'جاري التحميل...' : c.total ? `عرض ${from}–${to} من ${c.total.toLocaleString('en-US')} منتج` : 'لا توجد نتائج'}
+        </p>
+      </Reveal>
+      <CatalogToolbar state={c.state} update={c.update} reset={c.reset} activeCount={c.activeCount} hideCategory={!!cat} hideSale={query === 'tag:sale'} />
+      {c.loading
+        ? <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">{Array.from({ length: 10 }, (_, i) => <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-muted" />)}</div>
+        : c.products.length
+          ? <Stagger key={JSON.stringify(c.state)} className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4 xl:grid-cols-5">{c.products.map(x => <StaggerItem key={x.id}><ProductCard product={x} /></StaggerItem>)}</Stagger>
+          : <Reveal className="py-20 text-center text-muted-foreground">لا توجد منتجات مطابقة.</Reveal>}
+      <CatalogPagination page={c.state.page} totalPages={c.totalPages} onChange={(p) => c.update({ page: p })} />
+    </div>
+  )
+}
