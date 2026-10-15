@@ -57,7 +57,7 @@ export function buildParams(first: number, query?: string) {
   else if (q === "tag:featured") sp.set("featured", "true");
   else if (q === "tag:sale") sp.set("on_sale", "true");
   else if (q === "tag:best") sp.set("orderby", "popularity");
-  else if (q.startsWith("tag:")) { const id = CAT_IDS[q.slice(4)]; if (id) sp.set("category", String(id)); }
+  else if (q.startsWith("tag:")) { const s = q.slice(4); const id = /^c\d+$/.test(s) ? Number(s.slice(1)) : CAT_IDS[s]; if (id) sp.set("category", String(id)); }
   else sp.set("search", q);
   return sp;
 }
@@ -101,7 +101,7 @@ export const fetchCatalog = createServerFn({ method: "GET" })
     const sp = buildParams(data.perPage, data.base);
     sp.set("page", String(data.page));
     if (!(data.base === "tag:best" && data.sort === "new")) { const [o, d] = SORTS[data.sort]; sp.set("orderby", o); sp.set("order", d); }
-    if (data.category && CAT_IDS[data.category]) sp.set("category", String(CAT_IDS[data.category]));
+    if (data.category) { const id = /^c\d+$/.test(data.category) ? Number(data.category.slice(1)) : CAT_IDS[data.category]; if (id) sp.set("category", String(id)); }
     if (data.onSale) sp.set("on_sale", "true");
     if (data.minPrice != null) sp.set("min_price", String(data.minPrice));
     if (data.maxPrice != null) sp.set("max_price", String(data.maxPrice));
