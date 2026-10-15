@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/store/product-card";
 import { getProducts, type ShopifyProduct } from "@/lib/shopify";
 import { CATEGORIES } from "@/lib/categories";
+import { CategoryMap } from "@/components/store/category-map";
 import { meta } from "@/lib/seo";
 import hero from "@/assets/hero.jpg";
 import { motion } from "motion/react";
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/")({
 const tabs = [["وصل حديثًا", "tag:new"], ["الأكثر مبيعًا", "tag:best"], ["متميز", "tag:featured"], ["عروض", "tag:sale"]] as const;
 
 function Index() {
+  const [showMap, setShowMap] = useState(false);
   const [tab, setTab] = useState(0);
   const [products, setProducts] = useState<ShopifyProduct[] | null>(null);
   useEffect(() => {
@@ -63,6 +65,12 @@ function Index() {
             </StaggerItem>
           ))}
         </Stagger>
+        <div className="mt-8 text-center">
+          <Button variant="outline" size="lg" onClick={() => setShowMap((v) => !v)} aria-expanded={showMap}>
+            {showMap ? "إخفاء خريطة الأقسام" : "عرض خريطة الأقسام"}
+          </Button>
+        </div>
+        {showMap && <div className="mt-8"><CategoryMap /></div>}
       </section>
 
       <section className="mx-auto max-w-[1400px] px-4 sm:px-6">
