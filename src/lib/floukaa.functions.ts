@@ -101,7 +101,7 @@ export const fetchCatalog = createServerFn({ method: "GET" })
     const sp = buildParams(data.perPage, data.base);
     sp.set("page", String(data.page));
     if (!(data.base === "tag:best" && data.sort === "new")) { const [o, d] = SORTS[data.sort]; sp.set("orderby", o); sp.set("order", d); }
-    if (data.category && CAT_IDS[data.category]) sp.set("category", String(CAT_IDS[data.category]));
+    if (data.category) { const id = /^c\d+$/.test(data.category) ? Number(data.category.slice(1)) : CAT_IDS[data.category]; if (id) sp.set("category", String(id)); }
     if (data.onSale) sp.set("on_sale", "true");
     if (data.minPrice != null) sp.set("min_price", String(data.minPrice));
     if (data.maxPrice != null) sp.set("max_price", String(data.maxPrice));
