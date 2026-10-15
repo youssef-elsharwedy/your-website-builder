@@ -57,7 +57,7 @@ export function buildParams(first: number, query?: string) {
   else if (q === "tag:featured") sp.set("featured", "true");
   else if (q === "tag:sale") sp.set("on_sale", "true");
   else if (q === "tag:best") sp.set("orderby", "popularity");
-  else if (q.startsWith("tag:")) { const id = CAT_IDS[q.slice(4)]; if (id) sp.set("category", String(id)); }
+  else if (q.startsWith("tag:")) { const s = q.slice(4); const id = /^c\d+$/.test(s) ? Number(s.slice(1)) : CAT_IDS[s]; if (id) sp.set("category", String(id)); }
   else sp.set("search", q);
   return sp;
 }
