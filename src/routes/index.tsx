@@ -75,9 +75,9 @@ function Index() {
 
       <section className="mx-auto max-w-[1400px] px-4 sm:px-6">
         <Reveal className="mb-8 flex justify-center">
-          <div className="flex max-w-full gap-1 overflow-x-auto rounded-full border border-border bg-card p-1">
+          <div role="tablist" className="grid w-full max-w-md grid-cols-4 gap-1 overflow-hidden rounded-full border border-border bg-card p-1">
             {tabs.map(([l], i) => (
-              <button key={l} onClick={() => setTab(i)} className={`relative shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-colors ${i === tab ? "text-primary-foreground" : "hover:text-accent"}`}>
+              <button key={l} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} className={`relative min-w-0 truncate whitespace-nowrap rounded-full px-1 py-2 text-xs font-bold sm:px-3 sm:text-sm transition-colors ${i === tab ? "text-primary-foreground" : "hover:text-accent"}`}>
                 {i === tab && <motion.span layoutId="home-tab" className="absolute inset-0 rounded-full bg-primary" transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
                 <span className="relative">{l}</span>
               </button>
