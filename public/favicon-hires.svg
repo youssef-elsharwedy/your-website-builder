@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@700&display=swap');
+    </style>
+    <linearGradient id="gemGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5D86E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#D4A856;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8942B;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="bgGradient" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#3D4B8F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2B3A7A;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background with subtle gradient -->
+  <rect width="512" height="512" fill="url(#bgGradient)"/>
+  
+  <!-- Outer decorative circle -->
+  <circle cx="256" cy="256" r="230" fill="none" stroke="#D4A856" stroke-width="12" opacity="0.85"/>
+  
+  <!-- Inner subtle circle -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#D4A856" stroke-width="3" opacity="0.4"/>
+  
+  <!-- Central gemstone/jewel with realistic facets -->
+  <g id="mainGem">
+    <!-- Main polygon (hexagon) -->
+    <polygon points="256,100 310,130 330,200 300,270 200,270 170,200 190,130" 
+             fill="url(#gemGradient)" stroke="#D4A856" stroke-width="2"/>
+    
+    <!-- Top left facet (light) -->
+    <polygon points="256,100 280,115 270,155 240,140" fill="#F5D86E" opacity="0.9"/>
+    
+    <!-- Top right facet -->
+    <polygon points="280,115 310,130 305,160 275,150" fill="#FFEA9E" opacity="0.7"/>
+    
+    <!-- Upper middle facet -->
+    <polygon points="256,100 240,140 270,155 290,130" fill="#F5D86E" opacity="0.75"/>
+    
+    <!-- Side facets (3D effect) -->
+    <polygon points="310,130 330,200 305,160" fill="#C99533" opacity="0.8"/>
+    <polygon points="170,200 200,270 180,230" fill="#8B7320" opacity="0.9"/>
+  </g>
+  
+  <!-- Sparkle accents (luxury indicators) -->
+  <circle cx="220" cy="160" r="6" fill="#F5D86E" filter="url(#glow)"/>
+  <circle cx="290" cy="200" r="5" fill="#F5D86E" opacity="0.8"/>
+  <circle cx="180" cy="240" r="4" fill="#D4A856" opacity="0.6"/>
+  <circle cx="330" cy="180" r="4" fill="#D4A856" opacity="0.6"/>
+  
+  <!-- Decorative arc at bottom (ring motif) -->
+  <path d="M 180 300 Q 256 340 340 300" fill="none" stroke="#D4A856" stroke-width="5" 
+        stroke-linecap="round" opacity="0.8"/>
+  
+  <!-- Side decorative elements -->
+  <circle cx="130" cy="256" r="5" fill="#F5D86E" opacity="0.5"/>
+  <circle cx="382" cy="256" r="5" fill="#F5D86E" opacity="0.5"/>
+  
+  <!-- Corner flourishes (Arabian style) -->
+  <circle cx="120" cy="120" r="3" fill="#D4A856" opacity="0.4"/>
+  <circle cx="392" cy="120" r="3" fill="#D4A856" opacity="0.4"/>
+  <circle cx="120" cy="392" r="3" fill="#D4A856" opacity="0.4"/>
+  <circle cx="392" cy="392" r="3" fill="#D4A856" opacity="0.4"/>
+  
+  <!-- Glow filter for sparkles -->
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>

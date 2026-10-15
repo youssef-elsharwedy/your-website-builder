@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="gemGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5D86E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#D4A856;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8942B;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="bgGradient" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#3D4B8F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2B3A7A;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="192" height="192" fill="url(#bgGradient)"/>
+  
+  <!-- Outer ring -->
+  <circle cx="96" cy="96" r="86" fill="none" stroke="#D4A856" stroke-width="5" opacity="0.85"/>
+  
+  <!-- Inner circle -->
+  <circle cx="96" cy="96" r="75" fill="none" stroke="#D4A856" stroke-width="1.5" opacity="0.4"/>
+  
+  <!-- Central gemstone -->
+  <polygon points="96,38 117,50 124,75 115,105 76,105 64,75 71,50" 
+           fill="url(#gemGradient)" stroke="#D4A856" stroke-width="1.2"/>
+  
+  <!-- Top facet light -->
+  <polygon points="96,38 105,43 102,58 90,53" fill="#F5D86E" opacity="0.9"/>
+  
+  <!-- Sparkles -->
+  <circle cx="82" cy="62" r="2.5" fill="#F5D86E"/>
+  <circle cx="110" cy="78" r="2" fill="#F5D86E" opacity="0.8"/>
+  <circle cx="70" cy="92" r="1.5" fill="#D4A856" opacity="0.6"/>
+  <circle cx="120" cy="88" r="1.5" fill="#D4A856" opacity="0.6"/>
+  
+  <!-- Bottom arc -->
+  <path d="M 68 115 Q 96 135 125 115" fill="none" stroke="#D4A856" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+  
+  <!-- Side accents -->
+  <circle cx="50" cy="96" r="2" fill="#F5D86E" opacity="0.5"/>
+  <circle cx="142" cy="96" r="2" fill="#F5D86E" opacity="0.5"/>
+</svg>
